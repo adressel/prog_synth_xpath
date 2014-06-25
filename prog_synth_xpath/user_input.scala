@@ -9,7 +9,6 @@ object user_input {
 	  val user_nodes =  DATA.xml \\ DATA.xml_xpath
 	  for (user_node <- user_nodes){
 	    xml_user_node_list += user_node.toString
-	    println (user_node.toString)
 	  }
 //	  xml_user_node_list.map(s => println(s))
 	}
