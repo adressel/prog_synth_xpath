@@ -4,7 +4,7 @@ import scala.io.Source
 object DTD{
 	var dtd_map:Map[String,Int] = Map()
 	var total_id = 0
-	 
+	def all = dtd_map
 	def populate ={
 		val regex = """<!ELEMENT\s+(\w+)\s+""".r
 		val dtd = Source.fromFile(s"${DATA.root}/DatabaseInventory.dtd")
