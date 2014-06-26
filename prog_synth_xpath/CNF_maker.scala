@@ -55,12 +55,11 @@ object CNF_maker {
 	    if(sv_ids.length > 0)
 	      clause_string += s" ${sv_ids.mkString(" ")}"
 	    if(node.children.length > 0) {
-	    	val child_output_id = for (child_id <- node.children) yield{
-	    		process_XML.xml_map.filter(_._2.id == child_id).toList(0)._2.output_node.id
-	    	}
+	      val child_output_id = for (child_id <- node.children) yield{
+	        process_XML.xml_map.filter(_._2.id == child_id).toList(0)._2.output_node.id
+	      }
+	      clause_string += s" ${child_output_id.mkString(" ")}"
 	    }
-//	      NEED CHILDREN'S OUTPUT_NODE IDS
-
 	  }
 	}
 }
