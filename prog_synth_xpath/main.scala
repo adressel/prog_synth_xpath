@@ -8,4 +8,5 @@ object main extends App{
   user_input.get_userNode_id
   process_XML.child_parent.map(s => println(s))
   CNF_maker.rule_1
+  Printer.print_file
 }
