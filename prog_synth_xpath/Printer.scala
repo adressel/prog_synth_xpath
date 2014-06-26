@@ -8,7 +8,6 @@ object Printer {
 	
 	def print_file = {
 	    val outputFile = new File(s"${Data.root}/cnf_files/output.cnf")
-
 	    val out = new BufferedWriter(new OutputStreamWriter(new FileOutputStream( outputFile) ), 8000000 )
 		val header = s"c output.enc\nc\np cnf ${Variable.count} ${CNF_maker.count} \n"
 		out.write(header)

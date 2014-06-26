@@ -9,4 +9,5 @@ object main extends App{
   process_XML.child_parent.map(s => println(s))
   CNF_maker.rule_1
   Printer.print_file
+  CNF_solver.solve
 }
