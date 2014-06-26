@@ -5,6 +5,8 @@ import scala.collection.mutable.ArrayBuffer
 abstract class SelectVariable (
   val label: String
 ) extends Variable {
+  
+  // matched_nodes keeps track of which nodes are mapped to which
   def matched_nodes : NodeSeq
 }
 
@@ -15,15 +17,20 @@ class AttributeVariable (
   def matched_nodes = {
     (Data.xml \\ label).filter((x => (x \ s"@${attr.key}").toString == attr.value))
   }
+  
+  override def toString = s"$label.${attr.key}=${attr.value}"
 }
 
 class TextVariable (
   label: String,
   text: String   
 ) extends SelectVariable(label) {
+  
   def matched_nodes = {
     (Data.xml \\ label).filter(x => x.text == text)
   }
+  
+  override def toString = s"<$label> $text"
 }
 
 object SelectVariable {
@@ -40,5 +47,6 @@ object SelectVariable {
         sv_buffer += new TextVariable(node.label, node.text)
       }
     }
+    svs = sv_buffer.toVector
   }
 }
