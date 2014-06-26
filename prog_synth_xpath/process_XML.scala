@@ -3,18 +3,12 @@ import scala.io.Source
 
 import scala.xml.XML
 
-//class xml_node (
-//	val contents : String,
-//	val xml_id : Int,
-//	val dtd_id : Int 
-//)
-
 object process_XML{
 	var xml_map:Map[String, Tuple2[Int, Int]] = Map()
 	var total_id = 0
 	
 	def populate = {
-		for (dtd_element <- DTD.dtd_map){
+		for (dtd_element <- DTD.all){
 			val temp =  DATA.xml \\ dtd_element._1 
 			var node_id = 0
 			for(xml_node <- temp){

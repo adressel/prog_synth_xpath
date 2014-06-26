@@ -18,6 +18,6 @@ object user_input {
 		  if (process_XML.xml_map.contains(user_node))
 			 xml_user_id_list += process_XML.xml_map(user_node)
 		}
-		xml_user_id_list.map(s => println(s))
+//		xml_user_id_list.map(s => println(s))
 	}
 }
