@@ -2,7 +2,7 @@ package prog_synth_xpath
 import scala.collection._
 
 object user_input {
-	val xml_user_id_list : mutable.ArrayBuffer[Tuple2[Int, Int]] = mutable.ArrayBuffer()
+	val xml_user_id_list : mutable.ArrayBuffer[input_node] = mutable.ArrayBuffer()
 	val xml_user_node_list : mutable.ArrayBuffer[String] = mutable.ArrayBuffer()
 
 	def prase_user_nodes = {
