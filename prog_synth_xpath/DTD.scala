@@ -12,7 +12,6 @@ object DTD{
 		  total_id += 1
 		  dtd_map += (element -> total_id)
 		}
-		dtd_map.map(s => println(s))
 	}
 	
 }
