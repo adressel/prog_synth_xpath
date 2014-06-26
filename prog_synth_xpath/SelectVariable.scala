@@ -1,20 +1,30 @@
 package prog_synth_xpath
-import scala.xml.MetaData
+import scala.xml._
 import scala.collection.mutable.ArrayBuffer
 
-class SelectVariable (
-  label: String
-) extends Variable 
+abstract class SelectVariable (
+  val label: String
+) extends Variable {
+  def matched_nodes : NodeSeq
+}
 
 class AttributeVariable (
   label: String,
   attr: MetaData
-) extends SelectVariable(label)
+) extends SelectVariable(label) {
+  def matched_nodes = {
+    (Data.xml \\ label).filter((x => (x \ s"@${attr.key}").toString == attr.value))
+  }
+}
 
 class TextVariable (
   label: String,
   text: String   
-) extends SelectVariable(label)
+) extends SelectVariable(label) {
+  def matched_nodes = {
+    (Data.xml \\ label).filter(x => x.text == text)
+  }
+}
 
 object SelectVariable {
   var svs: Vector[SelectVariable] = Vector()

@@ -22,4 +22,32 @@ object CNF_maker {
 		count += clause_buffer_1.length
 		clauses += clause_buffer_1
 	}
+	
+	val clause_buffer_2 : ArrayBuffer[String] = ArrayBuffer()
+	val clause_buffer_3 : ArrayBuffer[String] = ArrayBuffer()
+	def rule_23 = {
+	  val node_sv_map : mutable.Map[input_node, ArrayBuffer[Int]] = mutable.Map()
+	  
+	  for(sv <- SelectVariable.all) {
+	    val matched_nodes = sv.matched_nodes
+	    val unmatched_nodes = (Data.xml \\ sv.label).toSet -- matched_nodes.toSet
+	    for(node <- matched_nodes) {
+	      val node_id = process_XML.xml_map(node.text).output_node.id
+	      clause_buffer_3 += s"-${sv.id} $node_id"
+	      node_sv_map(process_XML.xml_map(node.text)) += sv.id
+	    }
+	    for(node <- unmatched_nodes) {
+	      val node_id = process_XML.xml_map(node.text).output_node.id
+	      clause_buffer_3 += s"-${sv.id} -$node_id"
+	    }
+	  }
+	  
+	  for((node, sv_ids) <- node_sv_map) {
+	    var clause_string = s"-${node.output_node.id}"
+	    if(sv_ids.length > 0)
+	      clause_string += s" ${sv_ids.mkString(" ")}"
+	    if(node.children.length > 0) {}
+//	      NEED CHILDREN'S OUTPUT_NODE IDS
+	  }
+	}
 }
