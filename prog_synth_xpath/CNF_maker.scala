@@ -26,28 +26,36 @@ object CNF_maker {
 	val clause_buffer_2 : ArrayBuffer[String] = ArrayBuffer()
 	val clause_buffer_3 : ArrayBuffer[String] = ArrayBuffer()
 	def rule_23 = {
+	  //node_sv_map keeps track of which SV's map to which ON's
 	  val node_sv_map : mutable.Map[input_node, ArrayBuffer[Int]] = mutable.Map()
 	  
 	  for(sv <- SelectVariable.all) {
+	    //matched_nodes and unmatched_nodes are both sequences that list the nodes
+	    //that sv "selects"
 	    val matched_nodes = sv.matched_nodes
 	    val unmatched_nodes = (Data.xml \\ sv.label).toSet -- matched_nodes.toSet
+	    
 	    for(node <- matched_nodes) {
+	      // get node_id from node.text (super inefficient right now)
 	      val node_id = process_XML.xml_map(node.text).output_node.id
 	      clause_buffer_3 += s"-${sv.id} $node_id"
+	      // update node_sv_map
 	      node_sv_map(process_XML.xml_map(node.text)) += sv.id
 	    }
+	    
 	    for(node <- unmatched_nodes) {
 	      val node_id = process_XML.xml_map(node.text).output_node.id
 	      clause_buffer_3 += s"-${sv.id} -$node_id"
 	    }
 	  }
 	  
+	  // RULE 2
 	  for((node, sv_ids) <- node_sv_map) {
 	    var clause_string = s"-${node.output_node.id}"
 	    if(sv_ids.length > 0)
 	      clause_string += s" ${sv_ids.mkString(" ")}"
 	    if(node.children.length > 0) {}
-//	      NEED CHILDREN'S OUTPUT_NODE IDS
+//	      NEED CHILDREN'S OUTPUT_NODE IDS TO FINISH.  Right now, this isn't possible
 	  }
 	}
 }
