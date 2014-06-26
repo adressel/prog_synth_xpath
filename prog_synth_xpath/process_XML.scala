@@ -17,8 +17,8 @@ class output_node (
 }
 
 object process_XML{
-	var xml_map:Map[String, input_node] = Map()
-	var child_parent:Map[Int, Int] = Map()
+	var xml_map:Map[String, input_node] = Map()// text -> input_node
+	var child_parent:Map[Int, Int] = Map()// child_id -> parent_id
 	def all = xml_map
 	def child_to_parent = child_parent
 	

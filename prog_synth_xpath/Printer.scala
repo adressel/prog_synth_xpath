@@ -6,7 +6,7 @@ import scala.collection.mutable.ArrayBuffer
 
 object Printer {
 	
-	def print_file = {
+	def print_file = {// almost the same printer as sql
 	    val outputFile = new File(s"${Data.root}/cnf_files/output.cnf")
 	    val out = new BufferedWriter(new OutputStreamWriter(new FileOutputStream( outputFile) ), 8000000 )
 		val header = s"c output.enc\nc\np cnf ${Variable.count} ${CNF_maker.count} \n"

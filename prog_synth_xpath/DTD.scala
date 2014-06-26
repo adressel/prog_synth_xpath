@@ -2,7 +2,7 @@ package prog_synth_xpath
 import scala.io.Source
 
 object DTD{
-	var dtd_map:Map[String,Int] = Map()
+	var dtd_map:Map[String,Int] = Map()// label -> dtd_id
 	var total_id = 0
 	def all = dtd_map
 	def populate ={
