@@ -8,11 +8,13 @@ class input_node (
   val output_node : output_node,
   val DTD_id : Int,
   val children : MutableList[Int] = MutableList()
-) extends Variable {}
+) extends Variable {
+}
 
 class output_node (
     
-) extends Variable {}
+) extends Variable {
+}
 
 object process_XML{
 	var xml_map:Map[String, input_node] = Map()
@@ -23,8 +25,8 @@ object process_XML{
 	def populate = {
 	  	val tempNode = new input_node(new output_node, 1)
 	  	child_parent += (2 -> 0)
-	   	xml_map += (DATA.xml.descendant_or_self(0).toString -> tempNode)
-	  	populate_helper(DATA.xml.descendant_or_self(0), tempNode)
+	   	xml_map += (Data.xml.descendant_or_self(0).toString -> tempNode)
+	  	populate_helper(Data.xml.descendant_or_self(0), tempNode)
 	}
 	
 	def populate_helper(node : Node, node_info : input_node) : Unit = {

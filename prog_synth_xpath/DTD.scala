@@ -7,7 +7,7 @@ object DTD{
 	def all = dtd_map
 	def populate ={
 		val regex = """<!ELEMENT\s+(\w+)\s+""".r
-		val dtd = Source.fromFile(s"${DATA.root}/DatabaseInventory.dtd")
+		val dtd = Source.fromFile(s"${Data.root}/DatabaseInventory.dtd")
 		for(regex(element) <- regex.findAllIn(dtd.mkString)) {
 		  total_id += 1
 		  dtd_map += (element -> total_id)

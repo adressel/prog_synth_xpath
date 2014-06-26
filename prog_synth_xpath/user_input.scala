@@ -5,12 +5,11 @@ object user_input {
 	val xml_user_id_list : mutable.ArrayBuffer[input_node] = mutable.ArrayBuffer()
 	val xml_user_node_list : mutable.ArrayBuffer[String] = mutable.ArrayBuffer()
 
-	def prase_user_nodes = {
-	  val user_nodes =  DATA.xml \\ DATA.xml_xpath
+	def parse_user_nodes = {
+	  val user_nodes =  Data.xml \\ Data.xml_xpath
 	  for (user_node <- user_nodes){
 	    xml_user_node_list += user_node.toString
 	  }
-//	  xml_user_node_list.map(s => println(s))
 	}
 	
 	def get_userNode_id = {
@@ -18,6 +17,5 @@ object user_input {
 		  if (process_XML.xml_map.contains(user_node))
 			 xml_user_id_list += process_XML.xml_map(user_node)
 		}
-//		xml_user_id_list.map(s => println(s))
 	}
 }
