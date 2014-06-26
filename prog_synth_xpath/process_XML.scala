@@ -34,7 +34,6 @@ object process_XML{
 	  for (descendant_node <- node.child) {
 		  val tempNode = new input_node (new output_node, DTD.all(descendant_node.label))
 		  child_parent += (tempNode.id -> node_info.id)
-//		  println(tempNode.id +"   "+ node_info)
 		  node_info.children += tempNode.id
 		  xml_map += (descendant_node.toString -> tempNode)
 		  populate_helper(descendant_node, tempNode)

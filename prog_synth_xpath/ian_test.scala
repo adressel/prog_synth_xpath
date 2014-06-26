@@ -2,7 +2,8 @@ package prog_synth_xpath
 
 object ian_test extends App {
   DTD.populate
-  for(node <- Data.xml) { 
+  val blah = Data.xml
+  for(node <- Data.xml.descendant) { 
     for(attr <- node.attributes) {
       println(attr.key + ":" + attr.value)
     }
