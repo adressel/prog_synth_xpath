@@ -13,9 +13,20 @@ object CNF_solver {
 		println(result)
 		if(clauses.size == 0)
 		  println("No solution found!  Printing WHERE clauses:")
-		
+		for (id <- clauses){
+		  for ((_,input) <- process_XML.xml_map){
+		    val tempList = input.filter(_.id == id)
+		    if(!tempList.isEmpty) println(DTD.dtd_map.filter(_._2 == tempList(0).DTD_id).toList(0)._1)
+		  }
+		}
+			
+		for (id <- clauses){
+		    val tempList = SelectVariable.all.filter(_.id == id)
+		    if (!tempList.isEmpty)
+		    	println(tempList.toList.mkString(" ") + s" \n")
+		}
 		val Some(runtime_match) = """Total Run Time\s*(\d+.?\d*)""".r.findFirstMatchIn(result)
-		runtime = runtime_match.group(1).toDouble
-		println(runtime)
+//		runtime = runtime_match.group(1).toDouble
+//		println(runtime)
 	}
 }

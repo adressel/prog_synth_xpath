@@ -1,5 +1,6 @@
 package prog_synth_xpath
 import scala.io.Source
+import scala.collection.mutable.MutableList
 import java.io._
 import scala.io._
 import scala.collection.mutable.ArrayBuffer
@@ -21,6 +22,9 @@ object Printer {
 		  } 
 		  out.flush()
 		}
+		out.write(s"c =========  user input  ============\n")
+		process_XML.xml_map.map(s => out.write(s._2.mkString("")))
+//		process_XML.xml_map.map(s => print(s._2.mkString("")))
 		out.close()
 	}
 }
