@@ -32,23 +32,30 @@ object CNF_maker {
 	  for(sv <- SelectVariable.all) {
 	    //matched_nodes and unmatched_nodes are both sequences that list the nodes
 	    //that sv "selects"
-	    val matched_nodes = sv.matched_nodes
-	    val unmatched_nodes = (Data.xml \\ sv.label).toSet -- matched_nodes.toSet
-	    
+	    val matched_nodes = sv.matched_nodes.toSet
+	    		println("\nmathced_node: ")
+	    	matched_nodes.map(s => println(s +" " + process_XML.xml_map(s.toString).output_node.id))
+	    	
+	    val unmatched_nodes = (Data.xml \\ sv.label).toSet -- matched_nodes
+	    	println("\nunmathced_node: ")
+	    	unmatched_nodes.map(s => println(s +" " + process_XML.xml_map(s.toString).output_node.id))
 	    for(node <- matched_nodes) {
 	      // get node_id from node.text (super inefficient right now)
-	      val node_id = process_XML.xml_map(node.text).output_node.id
+	      val node_id = process_XML.xml_map(node.toString).output_node.id
 	      clause_buffer_3 += s"-${sv.id} $node_id"
+	      println(s"-${sv.id} $node_id ${sv.toString()}")
 	      // update node_sv_map
-	      node_sv_map(process_XML.xml_map(node.text)) += sv.id
+	      if (node_sv_map.contains(process_XML.xml_map(node.toString)))
+	    	  node_sv_map(process_XML.xml_map(node.toString)) += sv.id
+	      else node_sv_map += (process_XML.xml_map(node.toString) -> ArrayBuffer(sv.id))
 	    }
 	    
 	    for(node <- unmatched_nodes) {
-	      val node_id = process_XML.xml_map(node.text).output_node.id
+	      val node_id = process_XML.xml_map(node.toString).output_node.id
 	      clause_buffer_3 += s"-${sv.id} -$node_id"
 	    }
 	  }
-	  
+	  println("start rule 2")
 	  // RULE 2
 	  for((node, sv_ids) <- node_sv_map) {
 	    var clause_string = s"-${node.output_node.id}"
@@ -60,6 +67,19 @@ object CNF_maker {
 	      }
 	      clause_string += s" ${child_output_id.mkString(" ")}"
 	    }
+	    clause_buffer_2 += clause_string
 	  }
+	  clauses += clause_buffer_2
+	  clauses += clause_buffer_3
 	}
 }
+
+
+
+
+
+
+
+
+
+

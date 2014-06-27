@@ -38,8 +38,7 @@ class TextVariable (
       case "<=" => scope.filter((x => x.text <= text))
     }
   }
-  
-  override def toString = s"<$label> $text"
+  override def toString = s"<$label>${operator}$text"
 }
 
 object SelectVariable {
