@@ -30,14 +30,8 @@ object CNF_solver {
 	  //get user input label
 	  val input_label = user_input.xml_user_node_list(0).label
 	  for(sv <- select_variables) {
-	    if(input_label == sv.label) {
-	      val xpath_expression = s"//$input_label[${sv.expression}]"
-	      println(xpath_expression)
-	    }
-	    else {
-	      val xpath_expression = s"//$input_label[${sv.label}/${sv.expression}]"
-	      println(xpath_expression)
-	    }
+        val xpath_expression = s"//$input_label[descendant-or-self::${sv.label}/${sv.expression}]"
+        println(xpath_expression)
 	  }
 	}
 }
