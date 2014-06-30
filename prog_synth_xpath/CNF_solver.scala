@@ -16,7 +16,7 @@ object CNF_solver {
 		for (id <- clauses){
 		  for ((_,input) <- process_XML.xml_map){
 		    val tempList = input.filter(_.id == id)
-		    if(!tempList.isEmpty) println(DTD.dtd_map.filter(_._2 == tempList(0).DTD_id).toList(0)._1)
+		    if(!tempList.isEmpty) println("hi")
 		  }
 		}
 			

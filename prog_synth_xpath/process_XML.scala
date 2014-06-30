@@ -6,7 +6,6 @@ import scala.collection.mutable.MutableList
 
 class input_node (
   val output_node : output_node,
-  val DTD_id : Int,
   val children : MutableList[Int] = MutableList(),
   var real_user_input : Boolean = false 
 ) extends Variable {
@@ -28,7 +27,7 @@ object process_XML{
 	def child_to_parent = child_parent
 	
 	def populate = {
-	  	val tempNode = new input_node(new output_node, 1)
+	  	val tempNode = new input_node(new output_node)
 	  	child_parent += (2 -> 0)
 	  	if (xml_map.contains(Data.xml.descendant_or_self(0).toString))
 	  	  xml_map(Data.xml.descendant_or_self(0).toString) += tempNode
@@ -40,7 +39,7 @@ object process_XML{
 //	  println(node.text + "  " + node_info.id)
 	  if (node.descendant.length == 1) return
 	  for (descendant_node <- node.child) {
-		  val tempNode = new input_node (new output_node, DTD.all(descendant_node.label))
+		  val tempNode = new input_node (new output_node)
 		  child_parent += (tempNode.id -> node_info.id)
 		  node_info.children += tempNode.id
 		  if (xml_map.contains(descendant_node.toString))
