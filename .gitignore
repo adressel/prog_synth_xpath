@@ -1,5 +1,7 @@
 *.class
 *.log
+zchaff*
+*.cnf
 
 # sbt specific
 .cache/
