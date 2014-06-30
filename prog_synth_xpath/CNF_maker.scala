@@ -5,6 +5,12 @@ import scala.collection._
 
 object CNF_maker {
 	var count = 0;
+	
+	def create = {
+	  rule_1
+	  rule_23
+	}
+	
 	val clauses : mutable.ArrayBuffer[mutable.ArrayBuffer[String]] = mutable.ArrayBuffer()
 	
 	def rule_1 = {
