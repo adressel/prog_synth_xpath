@@ -15,14 +15,14 @@ object CNF_maker {
 	
 	def rule_1 = {
 		val clause_buffer_1 : mutable.ArrayBuffer[String] = mutable.ArrayBuffer()
-		val input_xml_map = XMLNode.all
+		val input_xml_map = NodeVariable.all
 		for (nodes <- input_xml_map){
 		  for (node <- nodes._2){
 		    clause_buffer_1 += s"-${node.input_id} ${node.output_id}"
 			var tempClauseString = s"-${node.output_id} ${node.input_id}"
 			var tempNodeId = node.input_id
-			while (XMLNode.child_to_parent(tempNodeId) != 0){
-				tempNodeId = XMLNode.child_to_parent(tempNodeId) 
+			while (NodeVariable.child_to_parent(tempNodeId) != 0){
+				tempNodeId = NodeVariable.child_to_parent(tempNodeId) 
 				tempClauseString ++= " " + tempNodeId
 			}
 			clause_buffer_1 += tempClauseString
@@ -36,7 +36,7 @@ object CNF_maker {
 	val clause_buffer_3 : ArrayBuffer[String] = ArrayBuffer()
 	def rule_23 = {
 	  //node_sv_map keeps track of which SV's map to which ON's
-	  val node_sv_map : mutable.Map[XMLNode, ArrayBuffer[Int]] = mutable.Map()
+	  val node_sv_map : mutable.Map[NodeVariable, ArrayBuffer[Int]] = mutable.Map()
 	  
 	  for(sv <- SelectVariable.all) {
 	    //matched_nodes and unmatched_nodes are both sequences that list the nodes
@@ -45,7 +45,7 @@ object CNF_maker {
 	    	
 	    val unmatched_nodes = (Data.xml \\ sv.label).toSet -- matched_nodes
 	    for(nodes <- matched_nodes) {
-	      for (node <- XMLNode.xml_map(nodes.toString))
+	      for (node <- NodeVariable.xml_map(nodes.toString))
 	      {
 	    	  val id = node.output_id
 		      clause_buffer_3 += s"-${sv.id} ${id}"
@@ -57,7 +57,7 @@ object CNF_maker {
 	    }
 	    
 	    for(nodes <- unmatched_nodes) {
-	      for (node <- XMLNode.xml_map(nodes.toString)){
+	      for (node <- NodeVariable.xml_map(nodes.toString)){
 		      clause_buffer_3 += s"-${sv.id} -${node.output_id}"
 		    }
 	    }

@@ -1,10 +1,13 @@
 package prog_synth_xpath
 
 import scala.sys.process._
+import scala.collection.mutable.ArrayBuffer
 
 object CNF_solver {
 	var clauses : Array[Int] = Array()
 	var runtime = 0.0
+	
+	val select_variables : ArrayBuffer[SelectVariable] = ArrayBuffer()
 	
 	def solve = {
 		val result = s"${Data.root}zchaff ${Data.root}/cnf_files/output.cnf" !!
@@ -13,20 +16,17 @@ object CNF_solver {
 		println(result)
 		if(clauses.size == 0)
 		  println("No solution found!  Printing WHERE clauses:")
-		for (id <- clauses){
-		  for ((_,input) <- XMLNode.xml_map){
-		    val tempList = input.filter(_.input_id == id)
-		    if(!tempList.isEmpty) println("hi")
-		  }
-		}
 			
-		for (id <- clauses){
-		    val tempList = SelectVariable.all.filter(_.id == id)
-		    if (!tempList.isEmpty)
-		    	println(tempList.toList.mkString(" ") + s" \n")
-		}
+		for (id <- clauses)
+		    select_variables ++= SelectVariable.all.filter(_.id == id)
+		
 		val Some(runtime_match) = """Total Run Time\s*(\d+.?\d*)""".r.findFirstMatchIn(result)
 //		runtime = runtime_match.group(1).toDouble
 //		println(runtime)
+	}
+	
+	def process = {
+	  //get user input label
+	  
 	}
 }

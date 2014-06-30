@@ -2,7 +2,6 @@ package prog_synth_xpath
 import scala.collection._
 
 object user_input {
-	val xml_user_id_list : mutable.ArrayBuffer[XMLNode] = mutable.ArrayBuffer()
 	val xml_user_node_list : mutable.ArrayBuffer[String] = mutable.ArrayBuffer()
 
 	def parse_user_nodes = { // according to the user xpath to get the nodes user expected 
@@ -14,11 +13,10 @@ object user_input {
 	
 	def get_userNode_id = { // according to the xml_user_node_list we can get the id for each node
 		for (user_node <- xml_user_node_list){
-		  if (XMLNode.xml_map.contains(user_node)){
+		  if (NodeVariable.xml_map.contains(user_node)){
 		    var isDone = false 
-		    for (input <- XMLNode.xml_map(user_node)){
+		    for (input <- NodeVariable.xml_map(user_node)){
 		      if (!isDone && !input.real_user_input){
-			 	xml_user_id_list += input
 			 	input.real_user_input = true
 			 	isDone = true
 		      }
