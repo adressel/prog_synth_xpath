@@ -45,7 +45,7 @@ object CNF_maker {
 	    	
 	    val unmatched_nodes = (Data.xml \\ sv.label).toSet -- matched_nodes
 	    for(nodes <- matched_nodes) {
-	      for (node <- NodeVariable.xml_map(nodes.toString))
+	      for (node <- NodeVariable.xml_map(nodes))
 	      {
 	    	  val id = node.output_id
 		      clause_buffer_3 += s"-${sv.id} ${id}"
@@ -57,7 +57,7 @@ object CNF_maker {
 	    }
 	    
 	    for(nodes <- unmatched_nodes) {
-	      for (node <- NodeVariable.xml_map(nodes.toString)){
+	      for (node <- NodeVariable.xml_map(nodes)){
 		      clause_buffer_3 += s"-${sv.id} -${node.output_id}"
 		    }
 	    }

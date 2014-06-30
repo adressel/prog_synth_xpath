@@ -17,23 +17,19 @@ class NodeVariable (
 }
 
 object NodeVariable{
-	var xml_map:Map[String, MutableList[NodeVariable]] = Map()// text -> NodeVariable
+	var xml_map:Map[Node, ArrayBuffer[NodeVariable]] = Map()// text -> NodeVariable
 	var child_parent:Map[Int, Int] = Map()// child_id -> parent_id
+	
 	def all = xml_map
 	def child_to_parent = child_parent
-	
-	/* convert text to xml node
-	 * Data.xml filter (x => x.text == text)
-	 * and then we can use map from scala.xml.Node to NodeVariable
-	 */
-	
+
 	def populate = {
-	  	val tempNode = new NodeVariable
-	  	child_parent += (tempNode.input_id  -> 0)
-	  	if (xml_map.contains(Data.xml.descendant_or_self(0).toString))
-	  	  xml_map(Data.xml.descendant_or_self(0).toString) += tempNode
-	  	else xml_map += (Data.xml.descendant_or_self(0).toString -> MutableList(tempNode))
-	  	populate_helper(Data.xml.descendant_or_self(0), tempNode)
+	  	val temp_node = new NodeVariable
+	  	child_parent += (temp_node.input_id  -> 0)
+	  	if (xml_map.contains(Data.xml.descendant_or_self(0)))
+	  	  xml_map(Data.xml.descendant_or_self(0)) += temp_node
+	  	else xml_map += (Data.xml.descendant_or_self(0) -> ArrayBuffer(temp_node))
+	  	populate_helper(Data.xml.descendant_or_self(0), temp_node)
 	}
 	
 	def populate_helper(node : Node, node_info : NodeVariable) : Unit = {
@@ -42,9 +38,9 @@ object NodeVariable{
 		  val temp_node = new NodeVariable
 		  child_parent += (temp_node.input_id -> node_info.input_id)
 		  node_info.children += temp_node
-		  if (xml_map.contains(descendant_node.toString))
-			  xml_map(descendant_node.toString) += temp_node
-	  	  else xml_map += (descendant_node.toString -> MutableList(temp_node))
+		  if (xml_map.contains(descendant_node))
+			  xml_map(descendant_node) += temp_node
+	  	  else xml_map += (descendant_node -> ArrayBuffer(temp_node))
 		  populate_helper(descendant_node, temp_node)
 	  }
 	}

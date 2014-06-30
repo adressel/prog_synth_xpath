@@ -23,10 +23,15 @@ object CNF_solver {
 		val Some(runtime_match) = """Total Run Time\s*(\d+.?\d*)""".r.findFirstMatchIn(result)
 //		runtime = runtime_match.group(1).toDouble
 //		println(runtime)
+		process
 	}
 	
 	def process = {
 	  //get user input label
-	  
+	  val input_label = user_input.xml_user_node_list(0).label
+	  for(sv <- select_variables) {
+	    val xpath_expression = s"//$input_label[${sv.expression}]"
+	    println(xpath_expression)
+	  }
 	}
 }

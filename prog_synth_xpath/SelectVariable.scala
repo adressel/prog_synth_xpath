@@ -8,6 +8,7 @@ abstract class SelectVariable (
   // matched_nodes keeps track of which nodes are mapped to which
   def scope = (Data.xml \\ label)
   def matched_nodes : NodeSeq
+  def expression : String
 }
 
 class AttributeVariable (
@@ -17,12 +18,13 @@ class AttributeVariable (
 ) extends SelectVariable(label) {
   def matched_nodes = {
     operator match {
-      case "==" => scope.filter((x => (x \ s"@${attr.key}").toString == attr.value.text))
+      case "=" => scope.filter((x => (x \ s"@${attr.key}").toString == attr.value.text))
       case "<=" => scope.filter((x => (x \ s"@${attr.key}").toString <= attr.value.text))
       case ">=" => scope.filter((x => (x \ s"@${attr.key}").toString >= attr.value.text))
     }
   }
   override def toString = s"$label.${attr.key}${operator}${attr.value}"
+  override def expression = s"$label/@${attr.key}${operator}'${attr.value}'"
 }
 
 class TextVariable (
@@ -33,12 +35,13 @@ class TextVariable (
   
   def matched_nodes = {
     operator match {
-      case "==" => scope.filter((x => x.text == text))
+      case "=" => scope.filter((x => x.text == text))
       case ">=" => scope.filter((x => x.text >= text))
       case "<=" => scope.filter((x => x.text <= text))
     }
   }
   override def toString = s"<$label>${operator}$text"
+  override def expression = s"$label/text()='$text'"
 }
 
 object SelectVariable {
@@ -46,13 +49,13 @@ object SelectVariable {
   def all = svs
 
   def add_attribute_variables(label : String, attr: MetaData) {
-	svs += new AttributeVariable(label, attr, "==")
+	svs += new AttributeVariable(label, attr, "=")
 	svs += new AttributeVariable(label, attr, "<=")
 	svs += new AttributeVariable(label, attr, ">=")
   }
   
   def add_text_variables(label : String, text : String) {
-    svs += new TextVariable(label, text, "==")
+    svs += new TextVariable(label, text, "=")
     svs += new TextVariable(label, text, "<=")
     svs += new TextVariable(label, text, ">=")
   }
