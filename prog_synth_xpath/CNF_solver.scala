@@ -14,8 +14,8 @@ object CNF_solver {
 		if(clauses.size == 0)
 		  println("No solution found!  Printing WHERE clauses:")
 		for (id <- clauses){
-		  for ((_,input) <- process_XML.xml_map){
-		    val tempList = input.filter(_.id == id)
+		  for ((_,input) <- XMLNode.xml_map){
+		    val tempList = input.filter(_.input_id == id)
 		    if(!tempList.isEmpty) println("hi")
 		  }
 		}

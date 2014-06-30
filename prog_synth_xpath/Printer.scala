@@ -23,8 +23,7 @@ object Printer {
 		  out.flush()
 		}
 		out.write(s"c =========  user input  ============\n")
-		process_XML.xml_map.map(s => out.write(s._2.mkString("")))
-//		process_XML.xml_map.map(s => print(s._2.mkString("")))
+		XMLNode.xml_map.map(s => out.write(s._2.mkString("")))
 		out.close()
 	}
 }

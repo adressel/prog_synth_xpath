@@ -3,12 +3,12 @@ import scala.collection.mutable._
 
 object Variable {
 	var count = 0;
-	def newId() = {count += 1; count}
-	
+	def get_id() = {count += 1; count}
+
 	val all : ArrayBuffer[Variable] = ArrayBuffer()
 }
 
 class Variable {
-	val id = Variable.newId
+	val id = Variable.get_id
 	Variable.all += this
 }

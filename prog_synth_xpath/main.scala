@@ -1,7 +1,7 @@
 package prog_synth_xpath
 
 object main extends App{
-  process_XML.populate
+  XMLNode.populate
   user_input.parse_user_nodes
 //  println("user node id ++++++++")
   user_input.get_userNode_id
