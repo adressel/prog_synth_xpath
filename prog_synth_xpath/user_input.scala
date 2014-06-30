@@ -17,7 +17,7 @@ object user_input {
 		  if (process_XML.xml_map.contains(user_node)){
 		    var isDone = false 
 		    for (input <- process_XML.xml_map(user_node)){
-		      if (!input.real_user_input && !isDone){
+		      if (!isDone && !input.real_user_input){
 			 	xml_user_id_list += input
 			 	input.real_user_input = true
 			 	isDone = true
