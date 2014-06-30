@@ -24,7 +24,7 @@ class AttributeVariable (
     }
   }
   override def toString = s"$label.${attr.key}${operator}${attr.value}"
-  override def expression = s"$label/@${attr.key}${operator}'${attr.value}'"
+  override def expression = s"@${attr.key}${operator}'${attr.value}'"
 }
 
 class TextVariable (
@@ -41,7 +41,7 @@ class TextVariable (
     }
   }
   override def toString = s"<$label>${operator}$text"
-  override def expression = s"$label/text()='$text'"
+  override def expression = s"text()='$text'"
 }
 
 object SelectVariable {
