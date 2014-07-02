@@ -48,7 +48,7 @@ object CNF_maker {
 	      for (node <- NodeVariable.xml_map(nodes))
 	      {
 	    	  val id = node.output_id
-		      clause_buffer_3 += s"-${sv.id} ${id}"
+//		      clause_buffer_3 += s"-${sv.id} ${id}"
 		      // update node_sv_map
 		      if (node_sv_map.contains(node))
 		    	  node_sv_map(node) += sv.id
