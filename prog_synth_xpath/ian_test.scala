@@ -1,10 +1,11 @@
 package prog_synth_xpath
 
 object ian_test extends App {
-  SelectVariable.populate
-  val jeffery = (Data.xml \\ "Administrator").filter((x => (x \ s"@Extension").toString == "6007"))
-  println(jeffery.length)
-  val attrs = jeffery(0).attributes
-  val ext = attrs.value.text
-  println(ext)
+  NodeInfo.populate
+  val comments = new Label("Comments")
+  comments.populate
+  val comments_cnf = new CNF_maker(comments)
+  comments_cnf.create_skeleton
+  println(comments_cnf.clauses.length)
+  comments_cnf.clauses.foreach(println)
 }
