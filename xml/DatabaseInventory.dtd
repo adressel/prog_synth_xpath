@@ -1,12 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!ELEMENT DatabaseInventory (DatabaseName+)>
-<!ELEMENT DatabaseName (   GlobalDatabaseName
-                         , OracleSID
-                         , DatabaseDomain
-                         , Administrator+
-                         , DatabaseAttributes
-                         , Comments)
->
+<!ELEMENT DatabaseName (GlobalDatabaseName, OracleSID, DatabaseDomain, Administrator+, DatabaseAttributes, Comments)>
 <!ELEMENT GlobalDatabaseName (#PCDATA)>
 <!ELEMENT OracleSID          (#PCDATA)>
 <!ELEMENT DatabaseDomain     (#PCDATA)>
