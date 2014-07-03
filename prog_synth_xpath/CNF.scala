@@ -4,7 +4,7 @@ import java.lang.StringBuilder
 import scala.collection._
 import java.io._
 import scala.io._
-
+import scala.sys.process._
 
 class CNF(label: Label) {
   def count = clauses.length
@@ -49,6 +49,16 @@ class CNF(label: Label) {
 	}
     out.flush
     out.close
+  }
+  
+  def solve = {
+    val result = s"${Data.root}zchaff ${Data.root}/cnf_files/output.cnf" !!
+	val Some(clause_list) = "(.*)Random Seed Used".r.findFirstMatchIn(result)
+	val clauses = clause_list.group(1).split(" ")
+	  .filter(x => x.length > 0 && x(0) != '-').map(x => x.toInt)
+	val variables = clauses.map(label.Variable.id_map(_))
+	val node_variables = variables.collect{case x: label.NodeVariable => x}
+    val select_variables = variables.collect{case x: label.SelectVariable => x}
   }
 }
 
