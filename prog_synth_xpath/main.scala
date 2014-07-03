@@ -1,7 +1,6 @@
 package prog_synth_xpath
 
 object main extends App{
-  DTD_parser.populate
 //  NodeVariable.populate
 //  user_input.parse_user_nodes
 //  user_input.get_userNode_id
