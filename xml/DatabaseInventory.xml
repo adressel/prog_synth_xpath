@@ -8,7 +8,35 @@
     <OracleSID>production</OracleSID>
     <DatabaseDomain>iDevelopment.info</DatabaseDomain>
     <Administrator EmailAlias="jhunter" Extension="6007">Jeffrey Hunter</Administrator>
+    <DatabaseAttributes Type="Production" Version="93"/>
+    <Comments>
+      The following database should be considered the most stable for
+      up-to-date data. The backup strategy includes running the database
+      in Archive Log Mode and performing nightly backups. All new accounts
+      need to be approved by the DBA Group before being created.
+    </Comments>
+  </DatabaseName>
+
+  <DatabaseName>
+    <GlobalDatabaseName>production.iDevelopment.info</GlobalDatabaseName>
+    <OracleSID>production</OracleSID>
+    <DatabaseDomain>iDevelopment.info</DatabaseDomain>
+    <Administrator EmailAlias="jhunter" Extension="6007">Jeffrey Hunter</Administrator>
     <DatabaseAttributes Type="Production" Version="9i"/>
+    <Comments>
+      The following database should be considered the most stable for
+      up-to-date data. The backup strategy includes running the database
+      in Archive Log Mode and performing nightly backups. All new accounts
+      need to be approved by the DBA Group before being created.
+    </Comments>
+  </DatabaseName>
+
+  <DatabaseName>
+    <GlobalDatabaseName>production.iDevelopment.info</GlobalDatabaseName>
+    <OracleSID>production</OracleSID>
+    <DatabaseDomain>iDevelopment.info</DatabaseDomain>
+    <Administrator EmailAlias="jhunter" Extension="6007">Jeffrey Hunter</Administrator>
+    <DatabaseAttributes Type="s" Version="9i"/>
     <Comments>
       The following database should be considered the most stable for
       up-to-date data. The backup strategy includes running the database
