@@ -96,9 +96,11 @@ class Label (val label : String) {
 
   class Variable {
     val id = Variable.get_id
+    Variable.id_map(id) = this
   }
 
   object Variable {
+    val id_map: mutable.Map[Int, Variable] = mutable.Map()
     var count = 0
     def get_id = {count += 1; count}
   }
