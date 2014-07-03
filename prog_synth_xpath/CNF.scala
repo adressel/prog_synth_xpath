@@ -11,7 +11,10 @@ class CNF(label: Label) {
 
   val clauses: mutable.ArrayBuffer[String] = mutable.ArrayBuffer()
 
+  var desired_node_ids : Vector[Int] = Vector()
+  
   def add_input(node_info_ids : Vector[Int]) = {
+    desired_node_ids = node_info_ids
     //convert node_info id to node_variable id
     val nv_ids = node_info_ids.map(label.NodeVariable.id_map(_))
     for(nv_id <- nv_ids) {
@@ -20,10 +23,6 @@ class CNF(label: Label) {
   }
   
   def create_skeleton = {
-    //at least one sv must be true
-    val sv_ids = label.SelectVariable.all.map(_.id)
-    clauses += sv_ids.mkString(" ")
-
     for (sv <- label.SelectVariable.all) {
       val matched_nodes = sv.matched_nodes.toSet
       val unmatched_nodes = label.NodeVariable.all.toSet -- matched_nodes
@@ -59,6 +58,8 @@ class CNF(label: Label) {
 	val variables = clauses.map(label.Variable.id_map(_))
 	val node_variables = variables.collect{case x: label.NodeVariable => x}
     val select_variables = variables.collect{case x: label.SelectVariable => x}
+    
+    node_variables.length == desired_node_ids.length
   }
 }
 
