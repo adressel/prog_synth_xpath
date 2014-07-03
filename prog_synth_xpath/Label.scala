@@ -1,6 +1,7 @@
 package prog_synth_xpath
 import scala.xml._
 import scala.collection.mutable.ArrayBuffer
+import scala.collection._
 
 class Label (val label : String) {
   
@@ -11,10 +12,15 @@ class Label (val label : String) {
   
   object NodeVariable {
     private var nvs : ArrayBuffer[NodeVariable] = ArrayBuffer()
+    val id_map : mutable.Map[Int, Int] = mutable.Map()
     def all = nvs
     def populate = {
       //construct NodeVariables from NodeInfos with matching labels
-      nvs ++= NodeInfo.all.filter(_.label == label).map(new NodeVariable(_))
+      for(node_info <- NodeInfo.all.filter(_.label == label)) {
+        val nv = new NodeVariable(node_info)
+        id_map += (node_info.id -> nv.id)
+        nvs += nv
+      }
     }
   }
   
@@ -93,7 +99,7 @@ class Label (val label : String) {
   }
 
   object Variable {
-    var id = 0
-    def get_id = { id += 1; id }
+    var count = 0
+    def get_id = {count += 1; count}
   }
 }
