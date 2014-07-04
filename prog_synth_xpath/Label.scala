@@ -4,6 +4,7 @@ import scala.collection.mutable.ArrayBuffer
 import scala.collection._
 
 class Label (val label : String) {
+  populate
   
   def populate = {
     this.NodeVariable.populate
@@ -26,7 +27,9 @@ class Label (val label : String) {
   
   class NodeVariable (
     val info : NodeInfo
-  ) extends Variable {}
+  ) extends Variable {
+    val sv_match_ids : ArrayBuffer[Int] = ArrayBuffer()
+  }
   
   object SelectVariable {
     var svs: ArrayBuffer[SelectVariable] = ArrayBuffer()
