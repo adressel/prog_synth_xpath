@@ -5,8 +5,9 @@ import scala.collection._
 import java.io._
 import scala.io._
 import scala.sys.process._
+import scala.collection._
 
-class CNF(label: Label, node_info_ids: Vector[Int]) {
+class CNF(label: Label, node_info_Goodids: Vector[Int], node_info_Badids: Vector[Int]) {
   val clauses: mutable.ArrayBuffer[String] = mutable.ArrayBuffer()
 
   create
@@ -14,22 +15,42 @@ class CNF(label: Label, node_info_ids: Vector[Int]) {
 
   def create = {
     //convert node_info id to node_variable id
-    val nv_ids = node_info_ids.map(label.NodeVariable.id_map(_))
-    for (nv_id <- nv_ids) {
+    val nv_Gids = node_info_Goodids.map(label.NodeVariable.id_map(_))
+    for (nv_id <- nv_Gids) 
       clauses += nv_id.toString
-    }
+    
+    
+    val nv_Bids = node_info_Badids.map(label.NodeVariable.id_map(_))
+    for (nv_id <- nv_Bids) 
+      clauses += "-" + nv_id.toString
+    
+    val sv_nv_map : mutable.Map[Int, ArrayBuffer[Int]] = mutable.Map()
     
     for (sv <- label.SelectVariable.all) {
       val matched_nodes = sv.matched_nodes.toSet
       val unmatched_nodes = label.NodeVariable.all.toSet -- matched_nodes
       
       //sv -> output nodes
-      for (node <- matched_nodes)
-        clauses += s"-${sv.id} ${node.id}"
-
-      for (node <- unmatched_nodes)
+//      for (node <- matched_nodes){
+//        clauses += s"-${sv.id} ${node.id}"
+//        println(sv.expression + "  \n " + node.info.text)
+//      }
+      clauses += s"${sv.id} " + unmatched_nodes.map(s => s.id).mkString(" ")
+//      println(s"${sv.id} " + unmatched_nodes.map(s => s.id))
+      for (node <- unmatched_nodes){
         clauses += s"-${sv.id} -${node.id}"
+        clauses += s"-${sv.id} -${node.output_id}"
+        if (!sv_nv_map.contains(node.output_id)){
+//          println(node.output_id + " " + sv.id)
+          sv_nv_map += (node.output_id -> ArrayBuffer(sv.id))
+        }
+        else sv_nv_map(node.output_id) += sv.id
+//          println(node.output_id + " " + sv.id)}
+      }
     }
+    for (node <- sv_nv_map) {
+        clauses += s"${node._1} " + node._2.mkString(" ")
+      }
   }
 
   def print = {
@@ -51,13 +72,16 @@ class CNF(label: Label, node_info_ids: Vector[Int]) {
     val Some(clause_list) = "(.*)Random Seed Used".r.findFirstMatchIn(result)
     val clauses = clause_list.group(1).split(" ")
       .filter(x => x.length > 0 && x(0) != '-').map(x => x.toInt)
-    val variables = clauses.map(label.Variable.id_map(_))
+    val variables = clauses.map(label.Variable.id_map(_)).toSet
     val node_variables = variables.collect { case x: label.NodeVariable => x }
     val select_variables = variables.collect { case x: label.SelectVariable => x }
-
-    println(node_variables.length)
-    println(node_info_ids.length)
-    node_variables.length == node_info_ids.length
+//
+//    println(node_variables.length)
+//    node_variables.map(s => println(s.info.id))
+//    println(result)
+//    println(select_variables.length)
+//    select_variables.map(s => println(s.expression))
+    node_variables.size == node_info_Goodids.length
   }
 }
 

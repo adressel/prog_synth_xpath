@@ -24,14 +24,9 @@ object DTD_parser {
     val dtd = scala.io.Source.fromFile(s"${Data.root}/DatabaseInventory.dtd")
     for (element <- regex.findAllIn(dtd.mkString)) {
       val ele_label: String = element.replaceAll(" +", " ").split(" ")(1)
-      val temp_element =
-        if (dtd_map.contains((ele_label)))
-          dtd_map(ele_label)
-        else {
-          val ele = new DTD_element(ele_label, 0)
-          dtd_map += (ele_label -> ele)
-          ele
-        }
+      if (!dtd_map.contains((ele_label)))
+         dtd_map += (ele_label -> new DTD_element(ele_label, 0))
+      val temp_element = dtd_map(ele_label)
       val child_level = temp_element.level + 1
       val child_id_vector: ArrayBuffer[Int] = ArrayBuffer()
       if (element.indexOf("(") != -1) {
@@ -51,7 +46,5 @@ object DTD_parser {
       temp_element.children_ids = child_id_vector.toVector
     }
     dtd_map.map(s => println(s._1 + " " +s._2.forPrint))
-    
   }
-
 }

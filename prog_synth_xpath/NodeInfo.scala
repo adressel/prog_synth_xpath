@@ -12,7 +12,7 @@ class NodeInfo(
   val id: Int = NodeInfo.get_id
 }
 
-object NodeInfo {
+object NodeInfo {// the nodes from the whole XML file 
   private var id = 0;
   def get_id = { id += 1; id - 1 }
   private val node_infos: mutable.ArrayBuffer[NodeInfo] = mutable.ArrayBuffer()
