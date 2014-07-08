@@ -12,7 +12,7 @@ class NodeInfo(
   val id: Int = NodeInfo.get_id
 }
 
-object NodeInfo {// the nodes from the whole XML file 
+object NodeInfo {		// the nodes from the whole XML file 
   private var id = 0;
   def get_id = { id += 1; id - 1 }
   private val node_infos: mutable.ArrayBuffer[NodeInfo] = mutable.ArrayBuffer()
@@ -27,9 +27,10 @@ object NodeInfo {// the nodes from the whole XML file
       return node_info.id
     }
 
-    val children_ids = node.descendant.map(populate_helper(_, node_info.id))
+    val children_ids = node.child.map(populate_helper(_, node_info.id))
     
     node_info.children_ids = children_ids.toVector
+//    println(node_info.cheildren_ids)
     node_infos += node_info
     node_info.id
   }

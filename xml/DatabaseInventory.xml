@@ -3,12 +3,12 @@
 
 <DatabaseInventory>
 
-  <DatabaseName>
+  <DatabaseName Ty="1" Ve="9i">
     <GlobalDatabaseName>production.iDevelopment.info</GlobalDatabaseName>
     <OracleSID>production</OracleSID>
     <DatabaseDomain>iDevelopment.info</DatabaseDomain>
     <Administrator EmailAlias="jhunter" Extension="6007">Jeffrey Hunter</Administrator>
-    <DatabaseAttributes Type="Production" Version="93"/>
+    <DatabaseAttributes Type="Production" Version="9"/>
     <Comments>
       The following database should be considered the most stable for
       up-to-date data. The backup strategy includes running the database
@@ -17,7 +17,7 @@
     </Comments>
   </DatabaseName>
 
-  <DatabaseName>
+  <DatabaseName Ty="0" Ve="9i">
     <GlobalDatabaseName>production.iDevelopment.info</GlobalDatabaseName>
     <OracleSID>production</OracleSID>
     <DatabaseDomain>iDevelopment.info</DatabaseDomain>
@@ -31,7 +31,7 @@
     </Comments>
   </DatabaseName>
 
-  <DatabaseName>
+  <DatabaseName Ty="0" Ve="9i"> 
     <GlobalDatabaseName>production.iDevelopment.info</GlobalDatabaseName>
     <OracleSID>production</OracleSID>
     <DatabaseDomain>iDevelopment.info</DatabaseDomain>
@@ -45,7 +45,7 @@
     </Comments>
   </DatabaseName>
 
-  <DatabaseName>
+  <DatabaseName Ty="2" Ve="9">
     <GlobalDatabaseName>development.iDevelopment.info</GlobalDatabaseName>
     <OracleSID>development</OracleSID>
     <DatabaseDomain>iDevelopment.info</DatabaseDomain>
@@ -59,7 +59,7 @@
     </Comments>
   </DatabaseName>
 
-  <DatabaseName>
+  <DatabaseName Ty="3" Ve="9">
     <GlobalDatabaseName>testing.iDevelopment.info</GlobalDatabaseName>
     <OracleSID>testing</OracleSID>
     <DatabaseDomain>iDevelopment.info</DatabaseDomain>

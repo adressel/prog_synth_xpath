@@ -10,6 +10,7 @@
     <Administrator EmailAlias="jhunter" Extension="6007">Jeffrey Hunter</Administrator>
     <DatabaseAttributes Type="Production" Version="93"/>
     <Comments>
+      <dif>1</dif>
       The following database should be considered the most stable for
       up-to-date data. The backup strategy includes running the database
       in Archive Log Mode and performing nightly backups. All new accounts
@@ -24,6 +25,7 @@
     <Administrator EmailAlias="jhunter" Extension="6007">Jeffrey Hunter</Administrator>
     <DatabaseAttributes Type="Production" Version="9i"/>
     <Comments>
+      <dif>2</dif>
       The following database should be considered the most stable for
       up-to-date data. The backup strategy includes running the database
       in Archive Log Mode and performing nightly backups. All new accounts
@@ -38,6 +40,7 @@
     <Administrator EmailAlias="jhunter" Extension="6007">Jeffrey Hunter</Administrator>
     <DatabaseAttributes Type="s" Version="9i"/>
     <Comments>
+      <dif>3</dif>
       The following database should be considered the most stable for
       up-to-date data. The backup strategy includes running the database
       in Archive Log Mode and performing nightly backups. All new accounts

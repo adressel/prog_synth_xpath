@@ -15,12 +15,12 @@ class CNF(label: Label, node_info_Goodids: Vector[Int], node_info_Badids: Vector
 
   def create = {
     //convert node_info id to node_variable id
-    val nv_Gids = node_info_Goodids.map(label.NodeVariable.id_map(_))
+    val nv_Gids = node_info_Goodids.filter(label.NodeVariable.id_map.contains(_)).map(label.NodeVariable.id_map(_))
     for (nv_id <- nv_Gids) 
       clauses += nv_id.toString
     
     
-    val nv_Bids = node_info_Badids.map(label.NodeVariable.id_map(_))
+    val nv_Bids = node_info_Badids.filter(label.NodeVariable.id_map.contains(_)).map(label.NodeVariable.id_map(_))
     for (nv_id <- nv_Bids) 
       clauses += "-" + nv_id.toString
     
@@ -29,23 +29,14 @@ class CNF(label: Label, node_info_Goodids: Vector[Int], node_info_Badids: Vector
     for (sv <- label.SelectVariable.all) {
       val matched_nodes = sv.matched_nodes.toSet
       val unmatched_nodes = label.NodeVariable.all.toSet -- matched_nodes
-      
-      //sv -> output nodes
-//      for (node <- matched_nodes){
-//        clauses += s"-${sv.id} ${node.id}"
-//        println(sv.expression + "  \n " + node.info.text)
-//      }
       clauses += s"${sv.id} " + unmatched_nodes.map(s => s.id).mkString(" ")
-//      println(s"${sv.id} " + unmatched_nodes.map(s => s.id))
       for (node <- unmatched_nodes){
         clauses += s"-${sv.id} -${node.id}"
         clauses += s"-${sv.id} -${node.output_id}"
         if (!sv_nv_map.contains(node.output_id)){
-//          println(node.output_id + " " + sv.id)
           sv_nv_map += (node.output_id -> ArrayBuffer(sv.id))
         }
         else sv_nv_map(node.output_id) += sv.id
-//          println(node.output_id + " " + sv.id)}
       }
     }
     for (node <- sv_nv_map) {
@@ -56,7 +47,7 @@ class CNF(label: Label, node_info_Goodids: Vector[Int], node_info_Badids: Vector
   def print = {
     val out_file = new File(s"${Data.root}/cnf_files/output.cnf")
     val out = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(out_file)), 8000000)
-    val header = s"c output.enc\nc\np cnf ${label.Variable.count} ${clauses.length} \n"
+    val header = s"c output.enc\nc\np cnf ${Variable.count} ${clauses.length} \n"
     out.write(header)
     var ruleNum = 0;
     for (clause <- clauses) {
@@ -67,21 +58,15 @@ class CNF(label: Label, node_info_Goodids: Vector[Int], node_info_Badids: Vector
     out.close
   }
 
-  def solve = {
+  def solve : Tuple2[immutable.Set[NodeVariable], Vector[return_Info]] = {
     val result = s"${Data.root}zchaff ${Data.root}/cnf_files/output.cnf" !!
     val Some(clause_list) = "(.*)Random Seed Used".r.findFirstMatchIn(result)
     val clauses = clause_list.group(1).split(" ")
       .filter(x => x.length > 0 && x(0) != '-').map(x => x.toInt)
-    val variables = clauses.map(label.Variable.id_map(_)).toSet
-    val node_variables = variables.collect { case x: label.NodeVariable => x }
+    val variables = clauses.map(Variable.id_map(_)).toSet
+    val node_variables = variables.collect { case x: NodeVariable => x }
     val select_variables = variables.collect { case x: label.SelectVariable => x }
-//
-//    println(node_variables.length)
-//    node_variables.map(s => println(s.info.id))
-//    println(result)
-//    println(select_variables.length)
-//    select_variables.map(s => println(s.expression))
-    node_variables.size == node_info_Goodids.length
+    (node_variables, select_variables.map(s => s.returnInfo).toVector)
   }
 }
 

@@ -3,10 +3,37 @@ import scala.xml._
 import scala.collection.mutable.ArrayBuffer
 import scala.collection._
 
+ object Variable {
+    var id_map: mutable.Map[Int, Variable] = mutable.Map()
+    var count = 0
+    def get_id = {count += 1; count}
+    def reset = {
+      id_map = mutable.Map()
+      count = 0
+    }
+  }
+
+class Variable {
+    val id = Variable.get_id
+    Variable.id_map(id) = this
+  }
+
+class NodeVariable (
+    val info : NodeInfo
+  ) extends Variable {
+    val output_id = Variable.get_id
+    Variable.id_map(output_id) = this
+    val sv_match_ids : ArrayBuffer[Int] = ArrayBuffer()
+  }
+
+
+
+
 class Label (val label : String, val node_info_Goodids: Vector[Int], val node_info_Badids: Vector[Int]) {
   populate
   
   def populate = {
+    Variable.reset
     this.NodeVariable.populate
     this.SelectVariable.populate
   }
@@ -21,42 +48,33 @@ class Label (val label : String, val node_info_Goodids: Vector[Int], val node_in
         if (node_info_Goodids.contains(node_info.id) || node_info_Badids.contains(node_info.id)){
 	        val nv = new NodeVariable(node_info)
 	        id_map += (node_info.id -> nv.id)
-	        println(s"node_info_id : ${node_info.id}   node_V id : ${nv.id}")
+//	        println(s"node_info_id : ${node_info.id}   node_V id : ${nv.id} ${node_info.text}")
 	        nvs += nv
         }
       }
     }
   }
   
-  class NodeVariable (
-    val info : NodeInfo
-  ) extends Variable {
-    val output_id = Variable.get_id
-    Variable.id_map(output_id) = this
-    val sv_match_ids : ArrayBuffer[Int] = ArrayBuffer()
-  }
+  
   
   object SelectVariable {
     var svs: ArrayBuffer[SelectVariable] = ArrayBuffer()
     def all = svs
 
     def add_attribute_variables(attr: MetaData) {
-//      svs += new AttributeVariable(attr.key, attr.value.text, "=")
       svs += new AttributeVariable(attr.key, attr.value.text, "<=")
       svs += new AttributeVariable(attr.key, attr.value.text, ">=")
     }
 
     def add_text_variables(text: String) {
-//      svs += new TextVariable(text, "=")
       svs += new TextVariable(text, "<=")
       svs += new TextVariable(text, ">=")
     }
 
     def populate = {
-      val nv_ids = node_info_Goodids.map(NodeVariable.id_map(_))
+      val nv_ids = node_info_Goodids.filter(NodeVariable.id_map.contains(_)).map(NodeVariable.id_map(_))
       var sv_buffer: ArrayBuffer[SelectVariable] = ArrayBuffer()
       for (node <- NodeVariable.all.filter(s => nv_ids.contains(s.id))) {
-        println(node.info.text)
         for (attr <- node.info.attrs)
           add_attribute_variables(attr)
           
@@ -73,13 +91,13 @@ class Label (val label : String, val node_info_Goodids: Vector[Int], val node_in
     ) extends SelectVariable(label) {
     def matched_nodes = {
       operator match {
-//        case "=" => scope.filter(_.info.attrs(key).toString == value)
         case "<=" => scope.filter(_.info.attrs(key).toString <= value)
         case ">=" => scope.filter(_.info.attrs(key).toString >= value)
       }
     }
     override def toString = s"$label.$key $operator $value"
     override def expression = s"@${key}${operator}'${value}'"
+    override def returnInfo = new return_Info (label, operator, value, key)
   }
 
   class TextVariable(
@@ -89,13 +107,13 @@ class Label (val label : String, val node_info_Goodids: Vector[Int], val node_in
 
     def matched_nodes = {
       operator match {
-//        case "=" => scope.filter(_.info.text == text)
         case ">=" => scope.filter(_.info.text >= text)
         case "<=" => scope.filter(_.info.text <= text)
       }
     }
     override def toString = s"<$label>${operator}$text"
     override def expression = s"text() $operator '$text'"
+    override def returnInfo = new return_Info(label, operator, text)
   }
 
   abstract class SelectVariable(
@@ -105,16 +123,33 @@ class Label (val label : String, val node_info_Goodids: Vector[Int], val node_in
     def scope = NodeVariable.all
     def matched_nodes: ArrayBuffer[NodeVariable]
     def expression: String
-  }
-
-  class Variable {
-    val id = Variable.get_id
-    Variable.id_map(id) = this
-  }
-
-  object Variable {
-    val id_map: mutable.Map[Int, Variable] = mutable.Map()
-    var count = 0
-    def get_id = {count += 1; count}
+    def returnInfo : return_Info
   }
 }
+
+
+class return_Info (
+	val label_name : String,
+	val operator : String,
+	val text : String,
+	val attri : String = ""
+) {
+  def expression(out_operator : String) : String = {
+    if (attri != ""){
+      s"$label_name[@$attri$out_operator'$text']"
+    } else {
+      s"$label_name$out_operator'$text'"
+    }
+  }
+  
+  def expression : String = {
+    if (attri != ""){
+      s"$label_name[@$attri$operator'$text']"
+    } else {
+      s"$label_name$operator'$text'"
+    }
+  }
+  
+}
+
+
