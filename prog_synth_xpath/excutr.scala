@@ -4,6 +4,9 @@ import scala.collection.mutable._
 
 object excutr {
 	private var isDone : Boolean = false
+	def get_isDone = isDone
+	var remaining_bad_ids : List[Int] = List()
+	var forbidden_labels : ArrayBuffer[String] = ArrayBuffer()
   
 	def children_excute(label_name : String, good_ids : Vector[Int], bad_ids : Vector[Int]) : ArrayBuffer[return_Info] = {
 	  val sv : ArrayBuffer[return_Info] = ArrayBuffer() 
@@ -15,6 +18,7 @@ object excutr {
 		    isDone = true
 		    return sv
 		  } else if (return_bad_ids.size < bad_ids.size){
+		    check_delete_parent(bad_ids.diff(return_bad_ids.toSeq))
 		    sv ++= return_selected_node._2
 		  }
 
@@ -30,10 +34,21 @@ object excutr {
 	  	  for (child_id <- NodeInfo.all.filter(_.id == good_ids(0))(0).children_ids){
 	  	    if(!isDone){
 		  	    val new_label_name = NodeInfo.all.filter(_.id == child_id)(0).label
+		  	    if (!forbidden_labels.contains(new_label_name))
 		  	    sv ++= children_excute(new_label_name, NodeInfo.all.filter(s => new_good_ids.contains(s.id)).filter(_.label == new_label_name).map(s => s.id).toVector
 		  	        , NodeInfo.all.filter(s => new_bad_ids.contains(s.id)).filter(_.label == new_label_name).map(s => s.id).toVector)
 	  	    }
 	  	  }
 	  sv
+	}
+	
+	def check_delete_parent(child_ids : Vector[Int]) = {
+	  for (node_id <- child_ids){
+	    var nid = node_id
+	    while(nid != 0){
+	      remaining_bad_ids = remaining_bad_ids.filter(_ != nid)
+	      nid = NodeInfo.get_map(nid).parent_id
+	    }
+	  }
 	}
 }

@@ -10,6 +10,7 @@ class NodeInfo(
   var children_ids: Vector[Int] = Vector()
   var text: String = ""
   val id: Int = NodeInfo.get_id
+  NodeInfo.id_map(id) = this
 }
 
 object NodeInfo {		// the nodes from the whole XML file 
@@ -18,11 +19,13 @@ object NodeInfo {		// the nodes from the whole XML file
   private val node_infos: mutable.ArrayBuffer[NodeInfo] = mutable.ArrayBuffer()
   def all = node_infos
   def populate = populate_helper(Data.xml, 0)
+  private var id_map: mutable.Map[Int, NodeInfo] = mutable.Map()
+  def get_map = id_map
 
   def populate_helper(node: Node, parent_id: Int): Int = {
     val node_info = new NodeInfo(node.label, node.attributes, parent_id)
-    node_info.text = node.text
     if (node.descendant.length == 1) {
+      node_info.text = node.text
       node_infos += node_info
       return node_info.id
     }
