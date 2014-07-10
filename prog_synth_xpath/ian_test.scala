@@ -14,7 +14,7 @@ object ian_test extends App {
   val cvs : ArrayBuffer[String] = ArrayBuffer()
   var num_parents = -1
   while (!excutr.get_isDone){
-	  println(excutr.remaining_bad_ids)
+//	  println(excutr.remaining_bad_ids)
 	  val temp =  excutr.children_excute(label_name, good_ids, bad_ids.toVector).distinct
 	  excutr.forbidden_labels += label_name
 	  val cvs_child : ArrayBuffer[String] = ArrayBuffer()
@@ -24,7 +24,7 @@ object ian_test extends App {
 	      cvs_child += cand_sv.expression
 	    } else cvs_child += cand_sv.expression("=")
 	  }
-	  cvs += cvs_child.distinct.mkString(" and ")
+	  cvs += cvs_child.distinct.map("self::" + _).mkString(" and ")
 	  
 	  label_name = NodeInfo.get_map(NodeInfo.get_map(good_ids(0)).parent_id).label
 	  good_ids = good_ids.map(s => NodeInfo.get_map(s).parent_id)
@@ -32,15 +32,24 @@ object ian_test extends App {
 	  excutr.remaining_bad_ids = bad_ids.toList
 	  num_parents += 1
   }
-  cvs.distinct.map(println(_))
+  println("\nThe selected variables: ")
+  cvs.distinct.reverse.map(println(_))
 
-  val xpath = new StringBuilder
-  xpath ++= "//" + original_label 
-  for (cv <- cvs.distinct){
-    xpath ++= "[descendant-or-self::" + cv 
+  println("\nThe xpath: ")
+  var xpath = ""
+//  xpath ++= "//" + original_label 
+  for (cv <- cvs.distinct.reverse.map("descendant-or-self::*[" + _ + "]")){
+    if (xpath != "")
+    	xpath = cv + " and parent::*[" + xpath + "]"
+    else xpath = cv
   }
+  
+  println(s"//$original_label[$xpath]")
  }
  
 
-//<!-- //GlobalDatabaseName[descendant-or-self::GlobalDatabaseName='production.iDevelopment.info' and parent::*/descendant-or-self::DatabaseName[@Ty='1']] -->
+////GlobalDatabaseName[descendant-or-self::GlobalDatabaseName='production.iDevelopment.info' and parent::*[descendant-or-self::*[self::DatabaseName[@Ve='9i'] and self::DatabaseName[@Ty='1']] and parent::*[descendant-or-self::*[self::DatabaseInventory[@Ha='12']]]]]
+
+
+
 

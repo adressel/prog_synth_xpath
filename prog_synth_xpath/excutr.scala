@@ -18,8 +18,8 @@ object excutr {
 		    isDone = true
 		    return sv
 		  } else if (return_bad_ids.size < bad_ids.size){
-		    check_delete_parent(bad_ids.diff(return_bad_ids.toSeq))
-		    sv ++= return_selected_node._2
+		    if (check_delete_parent(bad_ids.diff(return_bad_ids.toSeq)))
+		    	sv ++= return_selected_node._2
 		  }
 
 	  	  var new_good_ids : ArrayBuffer[Int] = ArrayBuffer()
@@ -42,13 +42,16 @@ object excutr {
 	  sv
 	}
 	
-	def check_delete_parent(child_ids : Vector[Int]) = {
+	def check_delete_parent(child_ids : Vector[Int]) : Boolean= {
+	  var has_parent = false
 	  for (node_id <- child_ids){
 	    var nid = node_id
 	    while(nid != 0){
+	      if (remaining_bad_ids.contains(nid)) has_parent = true
 	      remaining_bad_ids = remaining_bad_ids.filter(_ != nid)
 	      nid = NodeInfo.get_map(nid).parent_id
 	    }
 	  }
+	  has_parent
 	}
 }
