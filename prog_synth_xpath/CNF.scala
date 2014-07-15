@@ -16,32 +16,30 @@ class CNF(label: Label, node_info_Goodids: Vector[Int], node_info_Badids: Vector
   def create = {
     //convert node_info id to node_variable id
     val nv_Gids = node_info_Goodids.filter(label.NodeVariable.id_map.contains(_)).map(label.NodeVariable.id_map(_))
-    for (nv_id <- nv_Gids) 
+    for (nv_id <- nv_Gids)
       clauses += nv_id.toString
-    
-    
+
     val nv_Bids = node_info_Badids.filter(label.NodeVariable.id_map.contains(_)).map(label.NodeVariable.id_map(_))
-    for (nv_id <- nv_Bids) 
+    for (nv_id <- nv_Bids)
       clauses += "-" + nv_id.toString
-    
-    val sv_nv_map : mutable.Map[Int, ArrayBuffer[Int]] = mutable.Map()
-    
+
+    val sv_nv_map: mutable.Map[Int, ArrayBuffer[Int]] = mutable.Map()
+
     for (sv <- label.SelectVariable.all) {
       val matched_nodes = sv.matched_nodes.toSet
       val unmatched_nodes = label.NodeVariable.all.toSet -- matched_nodes
       clauses += s"${sv.id} " + unmatched_nodes.map(s => s.id).mkString(" ")
-      for (node <- unmatched_nodes){
+      for (node <- unmatched_nodes) {
         clauses += s"-${sv.id} -${node.id}"
         clauses += s"-${sv.id} -${node.output_id}"
-        if (!sv_nv_map.contains(node.output_id)){
+        if (!sv_nv_map.contains(node.output_id)) {
           sv_nv_map += (node.output_id -> ArrayBuffer(sv.id))
-        }
-        else sv_nv_map(node.output_id) += sv.id
+        } else sv_nv_map(node.output_id) += sv.id
       }
     }
     for (node <- sv_nv_map) {
-        clauses += s"${node._1} " + node._2.mkString(" ")
-      }
+      clauses += s"${node._1} " + node._2.mkString(" ")
+    }
   }
 
   def print = {
@@ -58,7 +56,7 @@ class CNF(label: Label, node_info_Goodids: Vector[Int], node_info_Badids: Vector
     out.close
   }
 
-  def solve : Tuple2[immutable.Set[NodeVariable], Vector[return_Info]] = {
+  def solve: Tuple2[immutable.Set[NodeVariable], Vector[return_Info]] = {
     val result = s"${Data.root}zchaff ${Data.root}/cnf_files/output.cnf" !!
     val Some(clause_list) = "(.*)Random Seed Used".r.findFirstMatchIn(result)
     val clauses = clause_list.group(1).split(" ")
