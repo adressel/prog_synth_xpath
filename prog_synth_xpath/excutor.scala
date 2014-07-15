@@ -2,7 +2,7 @@ package prog_synth_xpath
 
 import scala.collection.mutable._
 
-object excutr {
+object excutor {
 	private var isDone : Boolean = false
 	def get_isDone = isDone
 	var remaining_bad_ids : List[Int] = List()
@@ -27,6 +27,7 @@ object excutr {
 		  for (new_g_id <- good_ids) {
 		    new_good_ids ++= NodeInfo.all.filter(_.id == new_g_id)(0).children_ids
 		  }
+	  	  
 		  for (new_b_id <- return_bad_ids) {
 		    new_bad_ids ++= NodeInfo.all.filter(_.id == new_b_id)(0).children_ids
 		  }
@@ -37,7 +38,7 @@ object excutr {
 		  	    if (!forbidden_labels.contains(new_label_name))
 		  	    sv ++= children_excute(new_label_name, NodeInfo.all.filter(s => new_good_ids.contains(s.id)).filter(_.label == new_label_name).map(s => s.id).toVector
 		  	        , NodeInfo.all.filter(s => new_bad_ids.contains(s.id)).filter(_.label == new_label_name).map(s => s.id).toVector)
-	  	    }
+	  	    } else return sv
 	  	  }
 	  sv
 	}

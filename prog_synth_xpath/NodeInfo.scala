@@ -30,7 +30,7 @@ object NodeInfo {		// the nodes from the whole XML file
       return node_info.id
     }
 
-    val children_ids = node.child.map(populate_helper(_, node_info.id))
+    val children_ids = node.child.filter(_.label != "#PCDATA").map(populate_helper(_, node_info.id))
     
     node_info.children_ids = children_ids.toVector
 //    println(node_info.cheildren_ids)

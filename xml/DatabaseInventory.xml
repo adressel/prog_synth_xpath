@@ -65,7 +65,6 @@
     <DatabaseDomain>iDevelopment.info</DatabaseDomain>
     <Administrator EmailAlias="jhunter" Extension="6007">Jeffrey Hunter</Administrator>
     <Administrator EmailAlias="mhunter" Extension="6008">Melody Hunter</Administrator>
-    <Administrator EmailAlias="ahunter">Alex Hunter</Administrator>
     <DatabaseAttributes Type="Testing" Version="9i"/>
     <Comments>
       The following database will host more than half of the testing

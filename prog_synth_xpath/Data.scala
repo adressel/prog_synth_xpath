@@ -7,5 +7,6 @@ object Data {
     val root = "/Users/Stephen/scalaWorkSpace/xpath_T/weka/" // for Sheng
   
 	val xml_xpath = "DatabaseName"
-	val xml = XML.loadFile(s"$root/xml/DatabaseInventory.xml")
+//	val xml = XML.loadFile(s"$root/xml/DatabaseInventory.xml")
+	val xml = XML.loadFile(s"$root/xml/bookstore.xml")
 }

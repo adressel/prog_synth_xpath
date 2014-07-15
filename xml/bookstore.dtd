@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!ELEMENT source (BookStore+)>
+<!ELEMENT BookStore (book+, staff+)>
+<!ELEMENT book 	(author, booktype)>
+<!ELEMENT staff (role)>
+<!ELEMENT author   (#PCDATA)>
+<!ELEMENT booktype     (#PCDATA)>
+<!ELEMENT role     (#PCDATA)>
+
+<!ATTLIST BookStore       name CDATA #REQUIRED>
+<!ATTLIST BookStore       location  CDATA #REQUIRED>
+<!ATTLIST book       		bid  CDATA #REQUIRED>
+<!ATTLIST book      	 title  CDATA #REQUIRED>
+<!ATTLIST staff       name  CDATA #REQUIRED>
+<!ATTLIST staff       sid  CDbATA #REQUIRED>
+
